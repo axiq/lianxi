@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	 <script src='highcharts.js'></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
+</head>
+<body>
+	<h3>天气</h3>
+	<input type="text" name="area" id="area">
+	<div id="container" style="width:700px;height:500px"></div>
+</body>
+</html>
+<script src="jquery-2.1.4.min.js"></script>
+<script>
+	$(document).on("blur","#area",function(){
+		var area=$(this).val();
+		if(area=='' || $.trim(area).length==0){
+			alert('不能为空');
+			return false;
+		}
+		if(area.length>30){
+			alert('文本值长度不能大于30字符');
+			return false;
+		}
+		var reg=/[a-zA-Z0-9\u4e00-\u9fa5]$/;
+		if(!reg.test(area)){
+			alert('文本值必须为数字/字母/汉字');
+			return false;
+		}
+		$.ajax({
+			url:'progress.php',
+			type:'get',
+			dataType:'json',
+			data:{area:area},
+			success:function(e){
+				var tmparr=new Array();
+				var datearr=new Array();
+				console.log(e)
+				var d=eval(e);
+				//console.log(d)
+				for(var i=0;i<e.length;i++){
+					datearr.push(e[i]['date']);
+					var max=e[i]['tmp_max'];
+					var min=e[i]['tmp_min'];
+					arr=[min,max];
+					var tmp=arr.map(Number);
+					tmparr.push(tmp);
+					//tmparr.push(tmp);
+					console.log(tmparr);
+					console.log(datearr);
+				}
+				showWeather(tmparr,datearr);
+			}
+		})
+	})
+	function showWeather(tmparr,datearr){
+		var area=$("#area").val();
+		  var options = {
+            chart: {
+            	type: 'columnrange', // columnrange 依赖 highcharts-more.js
+       			inverted: true
+            },
+            title: {
+                text: '温度变化范围'                 // 标题
+            },
+            xAxis: {
+                categories: datearr   // x 轴分类
+            },
+            yAxis: {
+                title: {
+                    text: '温度(℃)'                // y 轴标题
+                }
+            },
+             plotOptions: {
+		        columnrange: {
+		            dataLabels: {
+		                enabled: true,
+		                formatter: function () {
+		                    return this.y + '°C';
+		                }
+		            }
+		        }
+		    },		
+            series: [{                              // 数据列
+                name: area,                        // 数据列名
+                data: tmparr,                     // 数据
+            }]
+        };
+        // 图表初始化函数
+        var chart = Highcharts.chart('container', options);
+	}
+</script>
