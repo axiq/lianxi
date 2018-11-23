@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="highcharts.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
+</head>
+<body>
+	<h2>天气</h2>
+	<input type="text" name="area" id="area">
+	<div id="container" style="width: 310px; height: 400px; "></div>
+</body>
+</html>
+<script src="jquery-2.1.4.min.js"></script>
+<script>
+	$(document).on("blur","#area",function(){
+		var area=$(this).val();
+		//console.log(area)
+		if(area.length>30){
+			alert('文本值长度不能大于30字符');
+			return false;
+		}
+		var reg=/[0-9a-zA-Z\u4e00-\u9fa5]$/;
+		if(!reg.test(area)){
+			alert('文本值必须为数字/字母/汉字');
+			return false;
+		}
+		$.ajax({
+			url:'weather.php',
+			type:'get',
+			dataType:'json',
+			data:{area:area},
+			success:function(e){
+				console.log(e)
+				var tmparr=new Array();
+				var datearr=new Array();
+				for(var i=0;i<e.length;i++){
+					datearr.push(e[i]['date']);
+					//console.log(datearr)
+					var max=e[i]['tmp_max'];
+					var min=e[i]['tmp_min'];
+					arr=[max,min];
+					tmp=arr.map(Number);
+					tmparr.push(tmp);
+					//console.log(tmparr);
+					showhighcharts(tmparr,area,datearr);
+				}
+			}
+		})
+	})
+	function showhighcharts(tmparr,area,datearr){
+		var chart = Highcharts.chart('container', {
+		    chart: {
+		        type: 'columnrange', // columnrange 依赖 highcharts-more.js
+		        inverted: true
+		    },
+		    title: {
+		        text: '温度变化范围'
+		    },
+		    subtitle: {
+		        text: area
+		    },
+		    xAxis: {
+		        categories: datearr
+		    },
+		    yAxis: {
+		        title: {
+		            text: '温度 ( °C )'
+		        }
+		    },
+		    tooltip: {
+		        valueSuffix: '°C'
+		    },
+		    plotOptions: {
+		        columnrange: {
+		            dataLabels: {
+		                enabled: true,
+		                formatter: function () {
+		                    return this.y + '°C';
+		                }
+		            }
+		        }
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    series: [{
+		        name: '温度',
+		        data: tmparr
+		    }]
+		});
+	}
+</script>
