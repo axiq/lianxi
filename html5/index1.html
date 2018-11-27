@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8'>
+	<title></title>
+	<script src='jquery-1.12.4.min.js'></script>
+</head>
+<body>
+<!-- 在nav标签中存放 导航链接 -->
+<nav>
+	<ul>
+		<li><a href="">新闻</a></li>
+		<li><a href="">体育</a></li>
+		<li><a href="">汽车</a></li>
+		<li><a href="">房产</a></li>
+	</ul>
+</nav>
+
+<ul id='u1'>
+	<li data-animal-type="鸟类" data-food='chongzi'>喜鹊</li>
+	<li data-animal-type="鱼类" data-food='xia'>金枪鱼</li> 
+	<li data-animal-type="蜘蛛" data-food='cangying'>蝇虎</li> 
+</ul>
+<button id='btn1'>click me</button>
+<script>
+$(function(){
+	$('#btn1').click(function(){
+		var str=$('#u1 li:first').attr('data-animal-type');
+		var str1=$('#u1 li:first').attr('data-food');
+		alert(str+'吃'+str1);
+	});
+});
+</script>
+<!-- 使用article存放一样独立的内容————表单 -->
+<article>
+	<form>
+		<!-- 使用 data-名称 这样的方式定义一些自定义属性，用来保存某个值 -->
+		<input type='text' id='name' data-pic='3'>
+		<input type='calendar'>
+		<input type='date'>
+		<input type='time'>
+		<input type='email'>
+		<input type='url'>
+		<input type='search'>
+		<input type='range'>
+		<input type='submit'>
+	</form>
+	<a href="abc.com?id=1&data-src=www">点击我</a>
+</article>	
+<!-- 在article标签中存放主体内容，如新闻详情页面中的文章 -->
+<article>
+	<!-- 在section标签中可以存放一小块内容 -->
+	<section>
+		<header><h2>高血脂可以吃哪种肉？哪种肉绝对不能吃？</h2></header>
+	</section>
+	<section>
+		说到“高血脂”，现如今患病人数越来越多；目前为止，我们国家的血脂异常的人群已经达到1.6亿人；高血脂相对而言也是一种比较危险的疾病，它是冠心病的一大诱因；血脂健康，我们的身体才能更加健康；关于高血脂吃肉的问题，一直是很多人关心的一件事情；说完全不可以吃肉的属于“谣言”；但对于高血脂吃肉这件事，需要大家靠谱作为，可以吃哪些肉？怎样吃更加健康？
+	</section>
+</article>
+<!-- 在aside标签中存放 辅助性内容，如侧边栏 -->
+<aside>
+	<img src="p1.jpg">
+	<video src='git.mp4' controls='controls' width='400px' height='300px'></video>
+	<audio src='xingfu.mp3' controls='controls'></audio>
+</aside>
+
+<!-- 在footer标签中存放 页面内容，如版权信息声明、友情链接等 -->
+<footer>
+	&copy 2018 八维研修学院
+</footer>
+</body>
+</html>
